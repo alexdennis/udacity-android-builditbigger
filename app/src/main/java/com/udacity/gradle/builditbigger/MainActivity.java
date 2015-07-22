@@ -12,8 +12,6 @@ import com.carltondennis.builditbigger.backend.myApi.MyApi;
 import com.carltondennis.jokedisplay.JokeDisplay;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
@@ -73,18 +71,7 @@ public class MainActivity extends ActionBarActivity {
             if(myApiService == null) {  // Only do this once
                 MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                         new AndroidJsonFactory(), null)
-                        // options for running against local devappserver
-                        // - 10.0.3.2 is localhost's IP address in Genymotion emulator
-                        // - turn off compression when running against local devappserver
-                        .setRootUrl("http://10.0.3.2:8080/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                                abstractGoogleClientRequest.setDisableGZipContent(true);
-                            }
-                        });
-                // end options for devappserver
-
+                        .setRootUrl("https://alex-udacity-jokefactory.appspot.com/_ah/api/");
                 myApiService = builder.build();
             }
 
