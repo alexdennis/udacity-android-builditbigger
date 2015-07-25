@@ -1,24 +1,17 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.carltondennis.builditbigger.backend.myApi.MyApi;
 import com.carltondennis.jokedisplay.JokeDisplay;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-
-import java.io.IOException;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements TellJokeAsyncTask.Callback{
 
-    private static MyApi myApiService = null;
     private TellJokeAsyncTask asyncTask;
 
     @Override
@@ -51,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view){
-        asyncTask = new TellJokeAsyncTask();
+        asyncTask = new TellJokeAsyncTask(this);
         asyncTask.execute();
     }
 
@@ -64,30 +57,10 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public class TellJokeAsyncTask  extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void...params) {
-            if(myApiService == null) {  // Only do this once
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                        new AndroidJsonFactory(), null)
-                        .setRootUrl("https://alex-udacity-jokefactory.appspot.com/_ah/api/");
-                myApiService = builder.build();
-            }
-
-            try {
-                return myApiService.tellAJoke().execute().getText();
-            } catch (IOException e) {
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String joke) {
-
-            Intent i = new Intent(MainActivity.this, JokeDisplay.class);
-            i.putExtra(JokeDisplay.JOKE_TEXT, joke);
-            startActivity(i);
-        }
+    @Override
+    public void onJokeResponse(String joke) {
+        Intent i = new Intent(this, JokeDisplay.class);
+        i.putExtra(JokeDisplay.JOKE_TEXT, joke);
+        startActivity(i);
     }
 }
