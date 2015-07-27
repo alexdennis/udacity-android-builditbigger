@@ -7,8 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.carltondennis.jokedisplay.JokeDisplay;
+
+import java.io.IOException;
 
 
 public class MainActivity extends ActionBarActivity implements TellJokeAsyncTask.Callback{
@@ -65,11 +68,24 @@ public class MainActivity extends ActionBarActivity implements TellJokeAsyncTask
     }
 
     @Override
-    public void onJokeResponse(String joke) {
+    public void onJokeSuccess(String joke) {
         spinner.setVisibility(View.GONE);
 
         Intent i = new Intent(this, JokeDisplay.class);
         i.putExtra(JokeDisplay.JOKE_TEXT, joke);
         startActivity(i);
+    }
+
+    private Toast toast;
+
+    @Override
+    public void onJokeFailure(IOException e) {
+        spinner.setVisibility(View.GONE);
+
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

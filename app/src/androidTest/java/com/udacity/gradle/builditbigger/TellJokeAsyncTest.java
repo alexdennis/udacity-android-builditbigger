@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.test.AndroidTestCase;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -32,11 +33,16 @@ public class TellJokeAsyncTest extends AndroidTestCase implements TellJokeAsyncT
     }
 
     @Override
-    public void onJokeResponse(String string) {
+    public void onJokeSuccess(String string) {
         // Yay! we got a joke
         joke = string;
 
         // Release the latch
         signal.countDown();
+    }
+
+    @Override
+    public void onJokeFailure(IOException e) {
+        fail(e.getMessage());
     }
 }
