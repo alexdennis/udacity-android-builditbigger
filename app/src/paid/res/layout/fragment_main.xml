@@ -22,7 +22,16 @@
         android:onClick="tellJoke"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/accent"
-
         />
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@+id/tell_joke_btn"
+        android:progressDrawable="@drawable/circular_progress_bar" />
 
 </RelativeLayout>
